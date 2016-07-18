@@ -1,5 +1,4 @@
-function (p, percents = range.p[2] > 1, adjust) 
-{
+logit<-function (p, percents = range.p[2] > 1, adjust) {
   range.p <- range(p, na.rm = TRUE)
   if (percents) {
     if (range.p[1] < 0 || range.p[1] > 100) 

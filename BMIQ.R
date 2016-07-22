@@ -1,3 +1,4 @@
+
 BMIQ <-function(beta.v,design.v,nL=3,doH=TRUE,nfit=50000,th1.v=c(0.2,0.75),th2.v=NULL,niter=5,tol=0.001,plots=TRUE,sampleID=1){
   # Beta MIxture Quantile dilation
   require(RPMM);

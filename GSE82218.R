@@ -1,7 +1,5 @@
 # For PCA Analysis to methylation 450K dataset
 # for ips methylatin 450K analysis
-
-
 PCAPlot<-function(data,pheno,output,multifigure=T){
   pca <- prcomp(data,center=T,scale = F)  # Here, input file: row is individual and column is variable
   outputfile=paste(output,".pdf",sep="")
@@ -46,10 +44,15 @@ phen1<-unlist(lapply(as.character(phen$characteristics_ch1),function(x) unlist(s
 phen2<-unlist(lapply(as.character(phen$characteristics_ch1.1),function(x) unlist(strsplit(x,"[: ]"))[length(unlist(strsplit(x,"[: ]")))]))
 phen3<-unlist(lapply(as.character(phen$characteristics_ch1.2),function(x) unlist(strsplit(x,"[: ]"))[length(unlist(strsplit(x,"[: ]")))]))
 
-# assess the imputation accuracy
+# modify
+phen3<-as.numeric(unlist(lapply(phen3,function(x) gsub("y","",x))))
+
+################################################################
+########## assess the imputation accuracy #######################
+#################################################################
 library("impute")
 BETA<-as.numeric(data.matrix(beta))
-Sample<-sample(1:length(BETA),2000)
+Sample<-sample(1:length(BETA),20000)
 Value<-BETA[Sample]
 BETA[Sample]<-NA
 BETA2<-matrix(BETA,ncol=ncol(beta),byrow=F)
@@ -58,11 +61,32 @@ BETA.normal2<-as.numeric(BETA.normal$data)
 Value2<-BETA.normal2[Sample]
 Error<-Value-Value2
 pdf("impute.error.pdf")
-plot(hist(Error),col="blue")
+plot(hist(Error,col="blue",xlab="Real-impute",ylab="Number"))
 dev.off()
 
+#############################################################################
+########## assess the quantile normalization accuracy #######################
+#############################################################################
+library("impute")
+library("preprocessCore")
 beta.normal<-impute.knn(data.matrix(beta),rowmax = 0.8)
 Beta=na.omit(beta.normal$data)
+NewBeta<-normalize.quantiles(Beta,copy=TRUE)
+rownames(NewBeta)=rownames(Beta)
+pdf("quantile.error.pdf")
+plot(hist(Beta-NewBeta,col="blue",xlab="Real-impute",ylab="Number"))
+dev.off()
+
+mapinfo<-read.table("~/NAS2/db/hg19/GPL13534.sort.bed")
+design<-as.numeric(mapinfo[match(rownames(NewBeta),mapinfo[,4]),7])
+NewBetaBMIQ<-BMIQ(NewBeta,design)
+pdf("quantile.bmiq.error.pdf")
+plot(hist(NewBeta-NewBetaBMIQ$nbeta,col="blue",xlab="Real-impute",ylab="Number"))
+dev.off()
+
+############################################################################
+########## assess the imputation accuracy ###################################
+#############################################################################
 PCAPlot(t(Beta),phen1,output="PCA.phen1.pdf",multifigure=T)
 PCAPlot(t(Beta),phen2,output="PCA.phen2.pdf",multifigure=T)
 PCAPlot(t(Beta),phen3,output="PCA.phen3.pdf",multifigure=T)

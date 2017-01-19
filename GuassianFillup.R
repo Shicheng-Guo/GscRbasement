@@ -28,8 +28,10 @@
 # Input: input variable, assume to be Guassian distribution, other distribution should be replace with kenal
 
 # usage: 
+set.seed(146)
+input<-rnorm(10000,0,1)
+input<-input[input>-1.5]
 GuassianFillup(input)
-
 # please load the 
 GuassianFillup<-function(input){
 input<- as.vector(input)
@@ -41,14 +43,13 @@ bound5
 bound3
 NumA<-sum(input<=peak)
 NumB<-sum(input>=peak)
-Estimatepeak<-seq(bound5,bound3,length.out=1000)[which.min(err)]
 if(NumA>NumB){
   print(paste("Esitmated Peak=",round(peak,3),"please fill up N=",abs(NumA-NumB),"data point in the rigth side",sep=" "))
 }else{
   print(paste("Esitmated Peak=",round(peak,3),"please fill up N=",abs(NumA-NumB),"data point in the left side",sep=" "))
 }
 
-inputsim<-c(input[input>=Estimatepeak],unlist(lapply(input[input>Estimatepeak],function(x) 2*Estimatepeak-x)))
+inputsim<-c(input[input>=peak],unlist(lapply(input[input>peak],function(x) 2*peak-x)))
 sdsim<-sd(inputsim)
 Max<-max(max(input)-peak,peak-min(input))
 hist(input,breaks=100,xlim=c(peak-Max,peak+Max),prob=TRUE)

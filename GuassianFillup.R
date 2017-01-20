@@ -56,7 +56,7 @@ hist(input,breaks=100,xlim=c(peak-Max,peak+Max),prob=TRUE)
 abline(h=0,lty=2,col="black",lwd=2)
 abline(v=peak,lty=2,col="red",lwd=2)
 lines(density(input, adjust=2), lty="dotted", col="darkgreen", lwd=2) 
-lines(density(rnorm(length(input),peak,sdsim), adjust=2), lty="dotted", col="darkblue", lwd=2) 
+lines(density(rnorm(length(inputsim),peak,sdsim), adjust=2), lty="dotted", col="darkblue", lwd=2) 
 legend("topright",legend = c("Estimated peak","Raw fitted density","Fill up density"),lty="dotted",lwd=2,col=c("red","darkgreen","darkblue"),bty = "n")
 }
 

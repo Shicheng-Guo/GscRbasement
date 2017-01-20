@@ -1,16 +1,36 @@
-HeatMap<-function(data,phen,figure="heatmap.pdf",cexRow = 0.01,cexCol = 1.2,Colv=T,Rowv=T){
+HeatMap<-function(data){
+  
+#  note: this function include correlation based heatmap (pearson or spearman)
+#  data: row is gene and column is sample
+#  colname and rowname cannot be NULL  
+#  Usage example:
+#  test<- matrix(runif(100),nrow=20)
+#  colnames(test)=c("A","A","A","B","B")
+#  rownames(test)=paste("Gene",1:20,sep="")
+#  HeatMap(test)
+  
   library("gplots")
-  colnames(data)=phen
   colors <- colorpanel(75,"midnightblue","mediumseagreen","yellow") 
   colors <-bluered(75)
-  colors <-greenred(75)
+  
   sidecol<-function(x){
     x<-as.numeric(as.factor(x))
     col<-rainbow(length(table(colnames(data))))
     sapply(x,function(x) col[x])
   }
-  ColSideColors=sidecol(phen)
-  pdf(figure)
-  heatmap.2(data,trace="none",cexRow = cexRow,cexCol = cexCol, ColSideColors=ColSideColors,density.info="none",col=colors,Colv=Colv,Rowv=Rowv,keysize=0.9, margins = c(5, 10))
-  dev.off()
+  
+  Hclust=function(x){hclust(x,method="complete")}
+  Distfun=function(x){as.dist((1 - cor(t(x),method = "spearman")))}
+  
+  ColSideColors=sidecol(colnames(data))
+  
+  heatmap.2(data,trace="none", 
+            hclust=Hclust,
+            distfun=Distfun, 
+            cexRow = 1, cexCol = 1,
+            ColSideColors=ColSideColors,
+            density.info="none",col=colors,
+            Colv=T,Rowv = TRUE,
+            keysize=0.9, margins = c(5, 10)
+            )
 }

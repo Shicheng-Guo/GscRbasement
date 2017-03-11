@@ -8,22 +8,27 @@ mat <- matrix(1:100, byrow=T, nrow=10)
 column_annotation <- sample(c("red", "blue", "green"), 10, replace=T)
 column_annotation <- as.matrix(column_annotation)
 colnames(column_annotation) <- c("Variable X")
-
 row_annotation <- sample(c("red", "blue", "green"), 10, replace=T)
 row_annotation <- as.matrix(t(row_annotation))
 rownames(row_annotation) <- c("Variable Y")
-
 heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
 
-# multiple column and row
+# multiple column and row -- Example A (Remember clab and rlab should be color matrix, not character, not numeric)
 mat <- matrix(1:100, byrow=T, nrow=10)
 column_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), ncol=2)
 colnames(column_annotation) <- c("Variable X1", "Variable X2")
-
 row_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), nrow=2)
 rownames(row_annotation) <- c("Variable Y1", "Variable Y2")
-
 heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
+
+# multiple column and row -- Example B (Remember clab and rlab should be color matrix, not character, not numeric)
+# you can use the following way to creat color based rlab and clab
+# clab<-data.matrix(apply(clab,2,function(x) as.numeric(as.factor(x))))  # change to numeric
+# clab<-data.matrix(apply(rlab,1,function(x) as.numeric(as.factor(x))))  # change to numeric
+# clab<-apply(clab,2,function(x) rainbow(length(unique(x)))[x])          # assign color by the numeric
+# rlab<-apply(rlab,1,function(x) rainbow(length(unique(x)))[x])          # assign color by the numeric
+# colnames(clab)=c("S1","S2","S3","S4")
+# rownames(clab)=c("V1","V2","V3","V4","V5")
 
 # adjust cex.key.axis by par(cex.axis), for example: par(cex.axis=0.5)
 pdf(file="serum-2i-heatmap3.pdf")

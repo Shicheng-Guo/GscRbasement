@@ -1,4 +1,7 @@
 # EXAMPLE USAGE
+library("gplots")
+library("devtools")
+source_url("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/heatmap.3.R")
 
 # example of colsidecolors rowsidecolors (single column, single row)
 mat <- matrix(1:100, byrow=T, nrow=10)

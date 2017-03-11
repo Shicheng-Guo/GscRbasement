@@ -30,6 +30,19 @@ heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
 # colnames(clab)=c("S1","S2","S3","S4")
 # rownames(clab)=c("V1","V2","V3","V4","V5")
 
+# multiple column and row -- Example C with multiple legends
+# pdf(file="serum-2i-heatmap3.pdf")
+# main_title="Serum vs 2i ScRNAseq"
+# par(cex.main=1,cex.axis=0.5)
+# heatmap.3(data, hclustfun=myclust, distfun=mydist, na.rm = TRUE, scale="column", dendrogram="both", margins=c(6,12),
+#           Rowv=TRUE, Colv=F,  ColSideColors=clab, symbreaks=FALSE, key=TRUE, symkey=FALSE,cex.key.xlab=0.7,
+#           density.info="none", trace="none", main=main_title, labCol=FALSE, labRow=rownames(data), cexRow=0.5, col=rev(rainbow(20)),
+#           ColSideColorsSize=6, KeyValueName="Gene Expression")
+# legend("topright",legend=c("A","B"),fill=c("red","blue"), border=FALSE, bty="n", y.intersp = 0.7, cex=0.7)
+# legend("right",legend=c("A","B"),fill=c("red","blue"), border=FALSE, bty="n", y.intersp = 0.7, cex=0.7)
+# legend("bottomright",legend=c("A","B"),fill=c("red","blue"), border=FALSE, bty="n", y.intersp = 0.7, cex=0.7)
+# dev.off()
+
 # adjust cex.key.axis by par(cex.axis), for example: par(cex.axis=0.5)
 pdf(file="serum-2i-heatmap3.pdf")
 par(cex.axis=0.5)

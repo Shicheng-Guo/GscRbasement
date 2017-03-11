@@ -4,7 +4,7 @@ library("devtools")
 source_url("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/heatmap.3.R")
 
 # example of colsidecolors rowsidecolors (single column, single row)
-mat <- matrix(1:100, byrow=T, nrow=10)
+mat <- matrix(1:100, byrow=T, nrow=10)                      #  x is a matrix of observations by variables.
 column_annotation <- sample(c("red", "blue", "green"), 10, replace=T)
 column_annotation <- as.matrix(column_annotation)
 colnames(column_annotation) <- c("Variable X")
@@ -14,7 +14,7 @@ rownames(row_annotation) <- c("Variable Y")
 heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
 
 # multiple column and row -- Example A (Remember clab and rlab should be color matrix, not character, not numeric)
-mat <- matrix(1:100, byrow=T, nrow=10)
+mat <- matrix(1:100, byrow=T, nrow=10)                   #  x is a matrix of observations by variables.
 column_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), ncol=2)
 colnames(column_annotation) <- c("Variable X1", "Variable X2")
 row_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), nrow=2)

@@ -30,7 +30,7 @@ TopGSIByCategory<-function(gsi,top=1,thresHigh=0.2,thresLow=0.1,allmin=0.05,plot
     parnum<-ceiling(sqrt(length(group)))
     pdf(otf1)
     par(mfrow=c(parnum,parnum),oma = c(2,2,2,2) + 0.1,mar = c(2,2,2,2) + 0.1,cex.axis=0.75, cex.lab=0.75)
-  for (i in 1:length(group)){
+    for (i in 1:length(group)){
     # select tissue-specific (remove target group<0.2 or non-target group>0.1)
     subset=gsi[which(gsi$group==group[i]),]
     rexclhigh<-which(apply(subset,1,function(x) x[grep(group[i],colnames(gsi))]<thresHigh))

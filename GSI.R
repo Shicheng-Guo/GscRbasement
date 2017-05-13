@@ -58,4 +58,17 @@ TopGSIByCategory<-function(gsi,top=1,thresHigh=0.2,thresLow=0.1,allmin=0.05,plot
   GSIRlt<-na.omit(GSIRlt)
   return(GSIRlt)
 }
+                          
+                          
 
+topgsi2bio<-function(topgsi){
+cor2bed<-function(cor){
+  cor<-as.character(cor)
+  a<-unlist(lapply(strsplit(cor,split=c(":")),function(x) strsplit(x,"-")))
+  bed<-matrix(a,ncol=3,byrow=T)
+  return(data.frame(bed))
+}
+bio<-data.frame(cor2bed(topgsi[,1]),topgsi[,2:3])
+rownames(bio)<-topgsi[,1]
+return(bio)
+}

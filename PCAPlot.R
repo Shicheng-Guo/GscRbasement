@@ -1,7 +1,10 @@
 
-
 PCAPlot<-function(data,pheno,output,multifigure=T){
   print("Please be sure row is individual, column is variable")
+  nacol<-which(unlist(apply(data,2,function(x) all(is.na(x)))))
+  if(length(nacol)>0){
+    matrix<-matrix[,-narow]
+  }
   pca <- prcomp(data,center=T,scale = F)  # Here, input file: row is individual and column is variable
   outputfile=paste(output,".pdf",sep="")
   pdf(outputfile)
@@ -29,4 +32,3 @@ PCAPlot<-function(data,pheno,output,multifigure=T){
   legend("bottomright",legend=names(table(pheno)),pch=1:length(table(pheno)),col=1:length(table(pheno)),bty="n",cex=0.6)
   dev.off()
 }
-

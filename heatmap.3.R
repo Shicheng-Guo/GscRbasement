@@ -1,7 +1,7 @@
 # EXAMPLE USAGE
 library("gplots")
 library("devtools")
-source_url("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/heatmap.3.R")
+source_url("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/heatmap3.R")
 
 # example of colsidecolors rowsidecolors (single column, single row)
 mat <- matrix(1:100, byrow=T, nrow=10)                      #  x is a matrix of observations by variables.
@@ -11,7 +11,7 @@ colnames(column_annotation) <- c("Variable X")
 row_annotation <- sample(c("red", "blue", "green"), 10, replace=T)
 row_annotation <- as.matrix(t(row_annotation))
 rownames(row_annotation) <- c("Variable Y")
-heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
+heatmap3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
 
 # multiple column and row -- Example A (Remember clab and rlab should be color matrix, not character, not numeric)
 mat <- matrix(1:100, byrow=T, nrow=10)                   #  x is a matrix of observations by variables.
@@ -19,7 +19,7 @@ column_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), nc
 colnames(column_annotation) <- c("Variable X1", "Variable X2")
 row_annotation <- matrix(sample(c("red", "blue", "green"), 20, replace=T), nrow=2)
 rownames(row_annotation) <- c("Variable Y1", "Variable Y2")
-heatmap.3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
+heatmap3(mat, RowSideColors=row_annotation, ColSideColors=column_annotation)
 
 # multiple column and row -- Example B (Remember clab and rlab should be color matrix, not character, not numeric)
 # you can use the following way to creat color based rlab and clab

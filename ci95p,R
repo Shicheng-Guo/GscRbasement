@@ -1,0 +1,20 @@
+# it is for 95% CI estimation for percentage values.
+
+scoreint <- function(n, p, z=1.96, cc=TRUE){
+  out <- list()
+  q <- 1-p
+  zsq <- z^2
+  denom <- (2*(n+zsq))
+  if(cc){ 
+    numl <- (2*n*p)+zsq-1-(z*sqrt(zsq-2-(1/n)+4*p*((n*q)+1)))
+    numu <- (2*n*p)+zsq+1+(z*sqrt(zsq+2-(1/n)+4*p*((n*q)-1)))
+    out$lb <- numl/denom
+    out$ub <- numu/denom
+    if(p==1) out$ub <- 1
+    if(p==0) out$lb <- 0
+  } else {
+    out$lb <- ((2*n*p)+zsq-(z*sqrt(zsq+(4*n*p*q))))/denom
+    out$ub <- ((2*n*p)+zsq+(z*sqrt(zsq+(4*n*p*q))))/denom
+  }
+  out
+}

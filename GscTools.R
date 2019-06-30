@@ -1,5 +1,15 @@
 library("Haplin")
+library("arm")
+library("randomForest")
 
+ENSG2Symbol<-function(ENSG){
+  db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
+  Symbol<-db[match(ENSG,db$V8),4]
+  ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
+  Symbol<-db[match(as.character(ENSG),db$V8),4]
+  return(Symbol)
+}
+                      
 manifest2barcode<-function(manifest){
 x=read.table(manifest,header = T)
 manifest_length= nrow(x)
@@ -50,4 +60,10 @@ id2pid<-function(filename){
   library("stringr")
   filename<-as.array(str_extract(filename,"edu_...."))
   unlist(lapply(filename,function(x) unlist(strsplit(x,"[_]"))[2]))
+}
+
+cpg2symbol<-function(cpg){
+map<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/hg19/GPL13534_450K_hg19_V3.bed")
+symbol<-map[match(cpg,map[,4]),5]
+return(symbol)
 }

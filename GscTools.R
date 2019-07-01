@@ -2,14 +2,6 @@ library("Haplin")
 library("arm")
 library("randomForest")
 
-ENSG2Symbol<-function(ENSG){
-  db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
-  Symbol<-db[match(ENSG,db$V8),4]
-  ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
-  Symbol<-db[match(as.character(ENSG),db$V8),4]
-  return(Symbol)
-}
-                      
 manifest2barcode<-function(manifest){
 x=read.table(manifest,header = T)
 manifest_length= nrow(x)
@@ -31,6 +23,8 @@ ENST2Symbol<-function(ENST){
 ENSG2Symbol<-function(ENSG){
   db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
   Symbol<-db[match(ENSG,db$V8),4]
+  ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
+  Symbol<-db[match(as.character(ENSG),db$V8),4]
   return(Symbol)
 }
 

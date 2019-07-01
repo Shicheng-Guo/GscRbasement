@@ -61,3 +61,59 @@ map<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDataba
 symbol<-map[match(cpg,map[,4]),5]
 return(symbol)
 }
+                
+                
+id2phen4<-function(filename){
+  library("stringr")
+  as.array(str_extract(filename,"TCGA-[0-9|a-z|A-Z]*-[0-9|a-z|A-Z]*-[0-9]*"))
+}
+
+id2phen3<-function(filename){
+  library("stringr")
+  as.array(str_extract(filename,"TCGA-[0-9|a-z|A-Z]*-[0-9|a-z|A-Z]*"))
+}
+
+id2bin<-function(filename){
+  library("stringr")
+  filename<-as.array(str_extract(filename,"TCGA-[0-9|a-z|A-Z]*-[0-9|a-z|A-Z]*-[0-9]*"))
+  as.numeric(lapply(strsplit(filename,"-"),function(x) x[4]))
+}
+
+filename=colnames(input)
+
+id2pid<-function(filename){
+  library("stringr")
+  filename<-as.array(str_extract(filename,"edu_...."))
+  unlist(lapply(filename,function(x) unlist(strsplit(x,"[_]"))[2]))
+}
+
+RawNARemove<-function(data,missratio=0.3){
+  threshold<-(missratio)*ncol(data)
+  NaRaw<-which(apply(data,1,function(x) sum(is.na(x))>=threshold))
+  zero<-which(apply(data,1,function(x) all(x==0))==T)
+  NaRAW<-c(NaRaw,zero)
+  if(length(NaRAW)>0){
+    output<-data[-NaRAW,]
+  }else{
+    output<-data;
+  }
+  output
+}
+
+cpg2symbol<-function(cpg){
+  map<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/hg19/GPL13534_450K_hg19_V3.bed")
+  symbol<-map[match(cpg,map[,4]),5]
+  return(symbol)
+}
+
+tsneplot<-function(mydata,phen,plot="tsne.plot.pdf"){
+  library("tsne")
+  data=data.frame(phen,mydata)
+  pdf(plot)
+  colors = rainbow(length(unique(data$phen)))
+  names(colors) = unique(data$phen)
+  ecb = function(x,y){plot(x,t='n'); text(x,labels=data$phen, col=colors[data$phen]) }
+  tsne_iris = tsne(data, epoch_callback = ecb, perplexity=10)
+  dev.off()
+}
+

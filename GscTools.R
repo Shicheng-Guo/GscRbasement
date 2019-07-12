@@ -79,8 +79,6 @@ id2bin<-function(filename){
   as.numeric(lapply(strsplit(filename,"-"),function(x) x[4]))
 }
 
-filename=colnames(input)
-
 id2pid<-function(filename){
   library("stringr")
   filename<-as.array(str_extract(filename,"edu_...."))

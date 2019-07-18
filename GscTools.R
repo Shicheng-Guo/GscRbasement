@@ -2,6 +2,19 @@ library("Haplin")
 library("arm")
 library("randomForest")
 
+RawZeroRemove<-function(data,missratio=0.5){
+  threshold<-(missratio)*ncol(data)
+  NaRaw<-which(apply(data,1,function(x) sum(is.na(x))>=threshold))
+  zero<-which(apply(data,1,function(x) sum(x==0)>=threshold))
+  NaRAW<-c(NaRaw,zero)
+  if(length(NaRAW)>0){
+    output<-data[-NaRAW,]
+  }else{
+    output<-data;
+  }
+  output
+}
+
 manifest2barcode<-function(manifest){
 x=read.table(manifest,header = T)
 manifest_length= nrow(x)

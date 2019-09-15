@@ -1,3 +1,6 @@
+#########################################################################################
+##########################  Shicheng Guo ####################################
+#########################################################################################
 ## Prediction gender with 450K dataset
 # Download json and transfer to csv (https://json-csv.com/)
 # Only can be run in Linux since it requre bedtools

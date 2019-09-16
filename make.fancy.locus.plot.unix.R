@@ -45,12 +45,14 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
   imputed.in.weak.ld <- subset(locus, (row.names(locus) != snp & locus$RSQR >= 0.2 & locus$RSQR < 0.5 & locus$TYPE == "imputed"))
   imputed.not.in.ld <- subset(locus, (row.names(locus) != snp & locus$RSQR<0.2 & locus$TYPE == "imputed"))
   par(mar=c(4,4,3,4))
-  plot(keep.recomb[,2], keep.recomb[,3], type="l", col="lightblue", lwd=1, xlim=c(min.pos, max.pos), ylim=c(-offset,range), xlab="", ylab="", main=locusname, axes=F)
+  # plot(keep.recomb[,2], keep.recomb[,3], type="l", col="lightblue", lwd=1, xlim=c(min.pos, max.pos), ylim=c(-offset,range), xlab="", ylab="", main=locusname, axes=F)
+  plot(keep.recomb[,2],( ( keep.recomb[,3] / 60 ) * ( 6 * big.range / 8 )), type="l", col="lightblue", lwd=1, xlim=c(min.pos, max.pos), ylim=c(-offset,range), xlab="", ylab="", main=locusname, axes=F)
   mtext(paste("Chromosome", chr, "position (kb)", sep=" "), side=1, line=2.5)
   axis(1, at=c(center.100kb.pos - offset.100kb.pos, center.100kb.pos, center.100kb.pos + offset.100kb.pos), labels=c((center.100kb.pos - offset.100kb.pos) / 1000, center.100kb.pos / 1000, (center.100kb.pos + offset.100kb.pos) / 1000), las=1) 
   axis(2, at=seq(0,range,2), labels=seq(0,range,2), las=1) 
   mtext("Observed (-logP)", side=2, at=(range/2), line=2)
-  axis(4, at=seq(0,big.range,length=4), labels=c("0","20","40","60"), las=1)
+#  axis(4, at=seq(0,big.range,length=4), labels=c("0","20","40","60"), las=1)
+  axis(4, at=c( 0, (big.range / 4),  ( 2 * big.range / 4), ( 3 * big.range / 4 ) ), labels=c("0","20","40","60"), las=1)
   mtext("Recombination rate (cM/Mb)", side=4, at=(-offset+big.range/2), line=2)
   box()
   lines(c(min.pos, max.pos), c(0,0), lty="dotted", lwd=1, col="black")
@@ -73,11 +75,11 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
   points(imputed.in.strong.ld$POS, -(log10(imputed.in.strong.ld$PVAL)), pch=23, cex=1.0, bg="grey")
   for ( i in 1:nrow(genes.in.locus)){ 
     if ( genes.in.locus[i,]$STRAND == "+" ) {
-      arrows(max(genes.in.locus[i,]$START, min.pos), -offset+i, min(genes.in.locus[i,]$STOP, max.pos), -offset+i, length=0.05, lwd=2, code=2, lty="solid", col="darkgreen")
-      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset+i, labels=genes.in.locus[i,]$GENE, cex=0.8)
+      arrows(max(genes.in.locus[i,]$START, min.pos), -offset, min(genes.in.locus[i,]$STOP, max.pos), -offset, length=0.05, lwd=2, code=2, lty="solid", col="darkgreen")
+      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset, labels=genes.in.locus[i,]$GENE, cex=0.8)
       }else{		
-      arrows(max(genes.in.locus[i,]$START, min.pos), -offset+i, min(genes.in.locus[i,]$STOP, max.pos), -offset+i, length=0.05, lwd=2, code=1, lty="solid", col="darkgreen")
-      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset+i, labels=genes.in.locus[i,]$GENE, cex=0.8)
+      arrows(max(genes.in.locus[i,]$START, min.pos), -offset, min(genes.in.locus[i,]$STOP, max.pos), -offset, length=0.05, lwd=2, code=1, lty="solid", col="darkgreen")
+      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset, labels=genes.in.locus[i,]$GENE, cex=0.8)
     }
   }
 }

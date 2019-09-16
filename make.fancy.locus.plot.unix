@@ -1,3 +1,15 @@
+args = commandArgs(trailingOnly=TRUE)
+
+snp=args[1]
+locusname=args[2]
+chr=args[3]
+localhitfile=args[4]
+range=args[5]
+best.pval=args[6]
+
+# Usage: make.fancy.locus.plot.unix("rs35469986", "TAB1", "22", locus, 10, 0.00005)
+
+locus <- read.table(localhitfile, header=T, row.names=1,as.is=T)
 make.fancy.locus.plot.unix <- function(snp, locusname, chr, locus, range, best.pval) {
   hit <- locus[snp,]
   min.pos <- min(locus$POS) - 10000
@@ -63,7 +75,8 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, locus, range, best.p
     }
   }
 }
+seed=sample(seq(1,100000,by=1),1)
+pdf(paste(snp,"localhit",seed,".pdf",sep="."))
+make.fancy.locus.plot.unix(snp, locusname, chr, locus, range, best.pval)
+dev.off()
 
-setwd("//mcrfnas2/bigdata/Genetic/Projects/shg047/rheumatology/RA/he2020/TAB1")
-locus <- read.table("local.new", header=T, row.names=1,as.is=T)
-make.fancy.locus.plot.unix("rs35469986", "TAB1", "22", locus, 10, 0.00005)

@@ -1,11 +1,11 @@
 args = commandArgs(trailingOnly=TRUE)
 
-snp=args[1]
+snp=as.character(args[1])
 locusname=args[2]
 chr=args[3]
 localhitfile=args[4]
-range=args[5]
-best.pval=args[6]
+range=as.numeric(args[5])
+best.pval=as.numeric(args[6])
 
 print(snp)
 print(locusname)
@@ -16,8 +16,8 @@ print(best.pval)
 
 # Usage: make.fancy.locus.plot.unix("rs35469986", "TAB1", "22", locus, 10, 0.00005)
 
-locus <- read.table(localhitfile, header=T, row.names=1,as.is=T)
-make.fancy.locus.plot.unix <- function(snp, locusname, chr, locus, range, best.pval) {
+make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range, best.pval){
+  locus <- read.table(localhitfile, header=T, row.names=1)
   hit <- locus[snp,]
   min.pos <- min(locus$POS) - 10000
   max.pos <- max(locus$POS) + 10000
@@ -74,10 +74,10 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, locus, range, best.p
   for ( i in 1:nrow(genes.in.locus)){ 
     if ( genes.in.locus[i,]$STRAND == "+" ) {
       arrows(max(genes.in.locus[i,]$START, min.pos), -offset+i, min(genes.in.locus[i,]$STOP, max.pos), -offset+i, length=0.05, lwd=2, code=2, lty="solid", col="darkgreen")
-      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset+i, labels=genes.in.locus[i,]$GENE, cex=0.8)
+      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset+1, labels=genes.in.locus[i,]$GENE, cex=0.8)
       }else{		
       arrows(max(genes.in.locus[i,]$START, min.pos), -offset+i, min(genes.in.locus[i,]$STOP, max.pos), -offset+i, length=0.05, lwd=2, code=1, lty="solid", col="darkgreen")
-      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset+i, labels=genes.in.locus[i,]$GENE, cex=0.8)
+      text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offse+1t, labels=genes.in.locus[i,]$GENE, cex=0.8)
     }
   }
 }

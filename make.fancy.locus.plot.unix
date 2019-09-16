@@ -7,6 +7,13 @@ localhitfile=args[4]
 range=args[5]
 best.pval=args[6]
 
+print(snp)
+print(locusname)
+print(chr)
+print(localhitfile)
+print(range)
+print(best.pval)
+
 # Usage: make.fancy.locus.plot.unix("rs35469986", "TAB1", "22", locus, 10, 0.00005)
 
 locus <- read.table(localhitfile, header=T, row.names=1,as.is=T)

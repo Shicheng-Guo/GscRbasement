@@ -1,10 +1,10 @@
-
+library("qqman")
+library("Haplin")
 args = commandArgs(trailingOnly=TRUE)
 mylimma<-read.table(args,head=T,sep="",check.names=F)
-colnames(mylimma)=c("CHR","SNP","BP","A1","TEST","NMISS","OR","STAT","P")
+mylimma=data.frame(CHR=mylimma$CHR,SNP=mylimma$ID,BP=mylimma$MAPINFO,P=mylimma$pval)
 seed=sample(seq(1,100000,by=1),1)
 manhattan.plot<-function(mylimma){
-library(qqman)
 CHR=mylimma$CHR
 if(length(grep("X",CHR))>0){
   CHR<-sapply(CHR,function(x) gsub(pattern = "X",replacement = "23",x))
@@ -21,7 +21,6 @@ dev.off()
 manhattan.plot(mylimma)
 
 qqplot<-function(pvalues,output="qqplot.pdf"){
-library("Haplin")
 pdf(paste("qqplot.",seed,".pdf",sep=""))
   pQQ(na.omit(pvalues), nlabs =length(pvalues), conf = 0.95)
 dev.off()

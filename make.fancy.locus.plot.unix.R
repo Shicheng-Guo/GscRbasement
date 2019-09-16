@@ -50,7 +50,7 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
   axis(1, at=c(center.100kb.pos - offset.100kb.pos, center.100kb.pos, center.100kb.pos + offset.100kb.pos), labels=c((center.100kb.pos - offset.100kb.pos) / 1000, center.100kb.pos / 1000, (center.100kb.pos + offset.100kb.pos) / 1000), las=1) 
   axis(2, at=seq(0,range,2), labels=seq(0,range,2), las=1) 
   mtext("Observed (-logP)", side=2, at=(range/2), line=2)
-  axis(4, at=seq(0,big.range,length=4), labels=c("0","20","40","60"), las=1)
+  axis(4, at=seq(0,big.range,length=4), labels=seq(0,big.range,length=4), las=1)
   mtext("Recombination rate (cM/Mb)", side=4, at=(-offset+big.range/2), line=2)
   box()
   lines(c(min.pos, max.pos), c(0,0), lty="dotted", lwd=1, col="black")

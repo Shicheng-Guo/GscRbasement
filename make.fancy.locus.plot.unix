@@ -29,7 +29,6 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, locus, range, best.p
   genelist$SIZE=genelist$STOP-genelist$START
   genes.in.locus <- subset(genelist, (CHR==paste("chr",chr,sep="") & genelist$START > min.pos & genelist$START < max.pos ) | ( CHR==paste("chr",chr,sep="") & genelist$STOP > min.pos & genelist$STOP < max.pos) )
   print(genes.in.locus)
-  
   markers.in.strong.ld <- subset(locus, (row.names(locus) != snp & locus$RSQR >= 0.8 & locus$TYPE == "typed"))
   markers.in.moderate.ld <- subset(locus, (row.names(locus) != snp & locus$RSQR >= 0.5 & locus$RSQR < 0.8 & locus$TYPE == "typed"))
   markers.in.weak.ld <- subset(locus, (row.names(locus) != snp & locus$RSQR >= 0.2 & locus$RSQR < 0.5 & locus$TYPE == "typed"))

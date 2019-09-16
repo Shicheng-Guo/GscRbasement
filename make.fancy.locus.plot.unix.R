@@ -83,6 +83,6 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
 }
 
 seed=sample(seq(1,100000,by=1),1)
-pdf(paste(snp,"localhit",seed,".pdf",sep="."))
+pdf(paste(snp,"localhit",seed,"pdf",sep="."))
 make.fancy.locus.plot.unix(snp, locusname, chr, localhitfile, range, best.pval)
 dev.off()

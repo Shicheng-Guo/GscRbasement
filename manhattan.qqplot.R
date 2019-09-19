@@ -1,7 +1,5 @@
-
 args = commandArgs(trailingOnly=TRUE)
 mylimma<-read.table(args,head=T,sep="",check.names=F)
-colnames(mylimma)=c("CHR","SNP","BP","A1","TEST","NMISS","OR","STAT","P")
 seed=sample(seq(1,100000,by=1),1)
 manhattan.plot<-function(mylimma){
 library(qqman)

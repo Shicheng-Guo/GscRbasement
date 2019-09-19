@@ -21,7 +21,7 @@ manhattan.plot(mylimma)
 qqplot<-function(pvalues,output="qqplot.pdf"){
 library("Haplin")
 pdf(paste("qqplot.",seed,".pdf",sep=""))
-  pQQ(na.omit(pvalues), nlabs =length(pvalues), conf = 0.99)
+  pQQ(na.omit(pvalues), nlabs =length(pvalues), conf = 0.9)
 dev.off()
 }
 qqplot(mylimma$P)

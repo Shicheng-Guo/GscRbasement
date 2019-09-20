@@ -15,12 +15,12 @@ print(range)
 print(best.pval)
 
 # Usage: make.fancy.locus.plot.unix("rs35469986", "TAB1", "22", locus, 10, 0.00005)
-snp="rs75958865"
-locusname="rs75958865"
-chr=9
-localhitfile="rs75958865.local"
-range=10
-best.pval=0.01
+# snp="rs75958865"
+# locusname="rs75958865"
+# chr=9
+# localhitfile="rs75958865.local"
+# range=10
+# best.pval=0.01
 
 make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range, best.pval){
   locus <- read.table(localhitfile, header=T, row.names=1)

@@ -85,7 +85,7 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
     if ( genes.in.locus[i,]$STRAND == "+" ) {
       arrows(max(genes.in.locus[i,]$START, min.pos), -offset, min(genes.in.locus[i,]$STOP, max.pos), -offset, length=0.05, lwd=2, code=2, lty="solid", col="darkgreen")
       text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset, labels=genes.in.locus[i,]$GENE, cex=0.8)
-      }else{		
+    }else{		
       arrows(max(genes.in.locus[i,]$START, min.pos), -offset, min(genes.in.locus[i,]$STOP, max.pos), -offset, length=0.05, lwd=2, code=1, lty="solid", col="darkgreen")
       text(genes.in.locus[i,]$START + (genes.in.locus[i,]$SIZE/2), -offset, labels=genes.in.locus[i,]$GENE, cex=0.8)
     }

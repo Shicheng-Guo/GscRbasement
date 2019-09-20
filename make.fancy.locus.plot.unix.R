@@ -25,8 +25,10 @@ print(best.pval)
 make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range, best.pval){
   locus <- read.table(localhitfile, header=T, row.names=1)
   hit <- locus[snp,]
-  min.pos <- min(locus$POS) - 10000
-  max.pos <- max(locus$POS) + 10000
+  min.pos <- min(locus$POS) - 200000    # very important
+  max.pos <- max(locus$POS) + 200000    # very important
+  min.pos
+  max.pos
   size.pos <- max.pos - min.pos
   center.pos <- min.pos + ( size.pos / 2 )
   center.100kb.pos <- round(center.pos / 100000) * 100000
@@ -57,7 +59,7 @@ make.fancy.locus.plot.unix <- function(snp, locusname, chr, localhitfile, range,
   axis(1, at=c(center.100kb.pos - offset.100kb.pos, center.100kb.pos, center.100kb.pos + offset.100kb.pos), labels=c((center.100kb.pos - offset.100kb.pos) / 1000, center.100kb.pos / 1000, (center.100kb.pos + offset.100kb.pos) / 1000), las=1) 
   axis(2, at=seq(0,range,2), labels=seq(0,range,2), las=1) 
   mtext("Observed (-logP)", side=2, at=(range/2), line=2)
-#  axis(4, at=seq(0,big.range,length=4), labels=c("0","20","40","60"), las=1)
+  #  axis(4, at=seq(0,big.range,length=4), labels=c("0","20","40","60"), las=1)
   axis(4, at=c( 0, (big.range / 4),  ( 2 * big.range / 4), ( 3 * big.range / 4 ) ), labels=c("0","20","40","60"), las=1)
   mtext("Recombination rate (cM/Mb)", side=4, at=(-offset+big.range/2), line=2)
   box()

@@ -9,5 +9,6 @@ pdf(output)
   pQQ(pvalues, nlabs =length(pvalues), conf = 0.95)
 dev.off()
 }
+qqplot(pvalues)
 # wget https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/qqplot.R -O qqplot.R
 # Rscript manhattan.plot.R Schrodi_IL23_IL17.Kbac.assoc 4 Schrodi_IL23_IL17.Kbac.assoc

@@ -48,7 +48,10 @@ make.fancy.locus.plot <- function(snp, locusname, chr, locus, range, best.pval){
   #
   recomb <- read.table(paste("~/hpc/rheumatology/RA/he2020/RecombinationRate/genetic_map_GRCh37_chr", chr, ".txt", sep=""), header=T,check.names = F)
   # recomb <- read.table(paste("//mcrfnas2/bigdata/Genetic/Projects/shg047/rheumatology/RA/he2020/RecombinationRate/genetic_map_GRCh37_chr", chr, ".txt", sep=""), header=T,check.names = F)
+  # head(recomb)
   keep.recomb <- subset(recomb, recomb[,2] > min.pos & recomb[,2] < max.pos)
+  # head(keep.recomb)
+  # tail(keep.recomb)
   # keep.recomb <- subset(recomb, recomb[,1] > min.pos & recomb[,1] < max.pos)
   #
   # genes in the region
@@ -138,7 +141,7 @@ make.fancy.locus.plot <- function(snp, locusname, chr, locus, range, best.pval){
       arrows(max(genes.in.locus[i,]$START, min.pos), -offset, min(genes.in.locus[i,]$STOP, max.pos), -offset, length=0.05, lwd=2, code=1, lty="solid", col="darkgreen")
     }
     if ( ! is.na(genes.in.locus[i,]$GENE) ) {
-      print((genes.in.locus[i,]$STOP+genes.in.locus[i,]$START)/ 2)
+      #print((genes.in.locus[i,]$STOP+genes.in.locus[i,]$START)/ 2)
       text((genes.in.locus[i,]$STOP+genes.in.locus[i,]$START)/ 2, -offset+( big.range/20 ), labels=genes.in.locus[i,]$GENE, cex=0.8)
   }
   }

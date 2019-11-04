@@ -146,8 +146,6 @@ make.fancy.locus.plot <- function(snp, locusname, chr, locus, range, best.pval){
   }
   }
 }
-make.fancy.locus.plot(snp, locusname, chr, localhitfile, range, best.pval)
-
 seed=sample(seq(1,100000,by=1),1)
 pdf(paste(snp,"localhit",seed,"pdf",sep="."))
 make.fancy.locus.plot(snp, locusname, chr, localhitfile, range, best.pval)

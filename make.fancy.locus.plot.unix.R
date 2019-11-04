@@ -48,10 +48,7 @@ make.fancy.locus.plot <- function(snp, locusname, chr, locus, range, best.pval){
   #
   recomb <- read.table(paste("~/hpc/rheumatology/RA/he2020/RecombinationRate/genetic_map_GRCh37_chr", chr, ".txt", sep=""), header=T,check.names = F)
   # recomb <- read.table(paste("//mcrfnas2/bigdata/Genetic/Projects/shg047/rheumatology/RA/he2020/RecombinationRate/genetic_map_GRCh37_chr", chr, ".txt", sep=""), header=T,check.names = F)
-  head(recomb)
   keep.recomb <- subset(recomb, recomb[,2] > min.pos & recomb[,2] < max.pos)
-  head(keep.recomb)
-  tail(keep.recomb)
   # keep.recomb <- subset(recomb, recomb[,1] > min.pos & recomb[,1] < max.pos)
   #
   # genes in the region

@@ -1,4 +1,4 @@
-HeatMap<-function(data){
+HeatMap<-function(data,Rowv=T,Colv=T){
   
 #  note: this function include correlation based heatmap (pearson or spearman)
 #  data: row is gene and column is sample
@@ -30,7 +30,7 @@ HeatMap<-function(data){
             cexRow = 1, cexCol = 1,
             ColSideColors=ColSideColors,
             density.info="none",col=colors,
-            Colv=T,Rowv = TRUE,
+            Colv=Colv,Rowv = Rowv,
             keysize=0.9, margins = c(5, 10)
             )
 }

@@ -1,5 +1,6 @@
 library(rtracklayer)
 library(GenomicRanges)
+sysmtem("mkdir consensuspeak")
 peak_files <- list.files(pattern = "*.narrowPeak$")
 peak_files
 peak_granges <- lapply(peak_files, import)

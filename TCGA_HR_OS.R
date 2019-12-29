@@ -4,6 +4,26 @@ library("metafor")
 library("survival")
 library("survminer")
 
+Symbol2ENSG<-function(Symbol){
+  db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
+  ENSG<-as.character(db[match(Symbol,db$V4),8])
+  ENSG<-na.omit(data.frame(Symbol,ENSG))
+  return(ENSG)
+}
+ENSG2Symbol<-function(ENSG){
+  db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
+  ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
+  Symbol<-db[match(as.character(ENSG),db$V8),4]
+  return(Symbol)
+}
+
+ensg2bed<-function(ENSG){
+  db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/hg19/ENSG.ENST.hg19.txt",as.is=T,head=F)
+  ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
+  bed<-unique(db[db$V5 %in% as.character(ENSG),c(1,2,3,5)])
+  return(bed)
+}
+
 load("~/hpc/methylation/Pancancer/RNA-seq/rnaseqdata.pancancer.RData")
 TCGAProjects=c("BLCA","BRCA","CESC","CHOL","COAD","ESCA","GBM","HNSC","KICH","KIRC","KIRP","LIHC","LUAD","LUSC","PAAD","PCPG","PRAD","READ","SARC","STAD","THCA","THYM","UCEC")
 panc<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/PANC/master/extdata/panc.txt",head=T)
@@ -35,12 +55,26 @@ phen<-data.frame(phen,OS[match(phen$phen3,OS$submitter_id),])
 phen$censored<-as.numeric(!phen$censored)
 phen$week=phen$time/7
 
-i=grep("ENSG00000231246",rownames(input))  # PANC246
-i=grep("ENSG00000213754",rownames(input))  # PANC754
-i=grep("ENSG00000181896",rownames(input))  # ZNF101
-i=grep("ENSG00000131849",rownames(input))  # ZNF132
+i=grep("ENSG00000231246",rownames(input))          # PANC246
+i=grep("ENSG00000213754",rownames(input))          # PANC754
+i=grep("ENSG00000181896",rownames(input))          # ZNF101
+i=grep("ENSG00000131849",rownames(input))          # ZNF132
+i=grep(Symbol2ENSG("NCOA4")[1,2],rownames(input))  # NCOA4
+i=grep(Symbol2ENSG("SLC7A11")[1,2],rownames(input))# SLC7A11
+i=grep(Symbol2ENSG("SAT2")[1,2],rownames(input))   # SAT2
+i=grep(Symbol2ENSG("GSS")[1,2],rownames(input))    # GSS
+
+xii<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/ferroptosis/master/codependency.txt",as.is=T)[,1]
+xii<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/ferroptosis/master/ferroptosis.genelist.txt",sep="\t",as.is=T)[,2]
+xii<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/ferroptosis/master/SLC7A11.codependency.txt",as.is=T)[,1]
+xii<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/breast/master/extdata/brca.tcga.target.hg19.bed",sep="\t",as.is=T)[,4]
+xii<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/cholangiocarcinoma/master/cholangiocarcinoma.hg19.bed",sep="\t",as.is=T)[,4]
+
+setwd("/home/local/MFLDCLIN/guosa/hpc/methylation/chol/OS")
 
 out2<-c()
+for(ii in xii){
+i=grep(Symbol2ENSG(ii)[1,2],rownames(input))   # GSS
 HR<-c()
 for(TCGAProject in TCGAProjects){
   newdata<-input[,phen$project_id==paste("TCGA-",TCGAProject,sep="")]
@@ -55,12 +89,12 @@ for(TCGAProject in TCGAProjects){
   HR<-rbind(HR,c(hr1,hr2[3],hr2[4]))
   
   fit <- survfit(Surv(week,censored)~Rna, data = dat)
-  survp<-ggsurvplot(fit, data = dat,conf.int = F,pval = TRUE,
-                    fun = "pct",risk.table = TRUE,size = 1,linetype = "strata",
-                    palette = c("#2E9FDF","#E7B800"),
-                    legend = "bottom",legend.title = rownames(input)[i],
-                    legend.labs = c("Low-expression","High-expression"))
-  ggsave(file = paste(rownames(input)[i],"_",TCGAProject,"_KM.pdf",sep=""), survp$plot)
+  # survp<-ggsurvplot(fit, data = dat,conf.int = F,pval = TRUE,
+  #                 fun = "pct",risk.table = TRUE,size = 1,linetype = "strata",
+  #                 palette = c("#2E9FDF","#E7B800"),
+  #                 legend = "bottom",legend.title = rownames(input)[i],
+  #                 legend.labs = c("Low-expression","High-expression"))
+  # ggsave(file = paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],"_",TCGAProject,"_KM.pdf",sep=""), survp$plot)
 }
 
 print(i)
@@ -70,7 +104,7 @@ fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixe
 randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
 out2<-rbind(out2,c(fixedEffect,randomEffect))
 
-pdf(paste(rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
+pdf(paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
 print(rownames(input)[i])
 forest(m,leftlabs = rownames(HR),
        lab.e = "Intervention",
@@ -84,6 +118,17 @@ forest(m,leftlabs = rownames(HR),
        print.I2.ci = TRUE,
        digits.sd = 2,fontsize=9,xlim=c(0.2,3))
 dev.off()
+write.table(HR,file=paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
+}
 colnames(out2)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random")
-write.table(out2,file=paste(rownames(input)[i],".OS.HR.PANC.txt",sep=""),sep="\t",col.names = NA,row.names = T,quote=F)
+rownames(out2)<-as.character(ENSG2Symbol(as.character(Symbol2ENSG(xii)[,2])))
+write.csv(out2,file=paste("chol_cancer.methylation.targets","OS.HR.csv",sep=""),quote=F)
+
+dmg<-read.csv("https://raw.githubusercontent.com/Shicheng-Guo/cholangiocarcinoma/master/extdata/meta/chol.pancancer.meta.table.pvalue.csv")
+os<-read.csv("https://raw.githubusercontent.com/Shicheng-Guo/cholangiocarcinoma/master/chol_cancer.methylation.targetsOS.HR.csv")
+merge(dmg,os,by="X")
+
+
+
+
 

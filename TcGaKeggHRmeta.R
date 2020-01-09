@@ -60,7 +60,11 @@ phen<-phen[idx,]
 input<-rnaseqdata[,idx]
 input[1:5,1:5]
 idx<-na.omit(match(OS$submitter_id,phen$phen3))
+
+noise<-abs(matrix(rnorm(ncol(input)*nrow(input),0,0.01),nrow=nrow(input),ncol=ncol(input)))
+input<-input+noise
 input<-log(input[,idx]+1,2)
+rownames(input)<-unlist(lapply(strsplit(rownames(input),"[.]"),function(x) x[1]))
 
 phen<-phen[idx,]
 phen<-data.frame(phen,OS[match(phen$phen3,OS$submitter_id),])
@@ -93,7 +97,8 @@ ENSG<-as.character(db[match(as.character(xii),db$V4),8])
 ENSG<-na.omit(data.frame(xii,ENSG))
 
 xgene<-c(as.character(ENSG[,2]))
-ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
+#ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
+ii<-na.omit(match(xgene,rownames(input)))
 
 out<-c()
 z<-1
@@ -104,12 +109,12 @@ for(TCGAProject in TCGAProjects){
   newdata<-input[,phen$project_id==paste("TCGA-",TCGAProject,sep="")]
   xphen<-phen[phen$project_id==paste("TCGA-",TCGAProject,sep=""),]
   dat<-data.frame(Rna=newdata[i,],xphen)
-  thres<-mean(dat[,1],na.rm=T)
+  #thres<-mean(dat[,1],na.rm=T)
   hr.fit<-summary(coxph(Surv(week,censored)~Rna,dat))
   hr1=hr.fit$coefficients[1,]
   hr2=hr.fit$conf.int[1,]
   HR<-rbind(HR,c(hr1,hr2[3],hr2[4]))
-  fit <- survfit(Surv(week,censored)~Rna, data = dat)
+  #fit <- survfit(Surv(week,censored)~Rna, data = dat)
 }
 
 rownames(HR)<-TCGAProjects
@@ -118,13 +123,16 @@ fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixe
 randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
 out<-rbind(out,c(fixedEffect,randomEffect))
 
-ENSGnk<-unlist(lapply(strsplit(rownames(input)[i],split="[.]"),function(x) x[1]))
-Symbolnk<-db[match(as.character(ENSGnk),db$V8),4]
+Symbolnk<-db[match(rownames(input)[i],db$V8),4]
 
 print(c(z,i,as.character(Symbolnk)))
 
 pdf(paste(Symbolnk,"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
-forest(m,leftlabs = rownames(HR),
+
+m<-na.omit(m)
+HR<-na.omit(HR)
+
+forest(na.omit(m),leftlabs = rownames(HR),
        lab.e = "Intervention",
        pooled.totals = FALSE,
        smlab = "",studlab=rownames(HR),

@@ -107,7 +107,7 @@ for(TCGAProject in TCGAProjects){
   fit <- survfit(Surv(week,censored)~Rna, data = dat)
 }
 
-print(c(z,i))
+print(c(z,i,as.character(rownames(input)[i])))
 rownames(HR)<-TCGAProjects
 m<-metagen(HR[,1],seTE=HR[,3],comb.fixed = TRUE,comb.random = TRUE,prediction=F,sm="HR")
 fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
@@ -115,7 +115,6 @@ randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.
 out<-rbind(out,c(fixedEffect,randomEffect))
 
 pdf(paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
-print(rownames(input)[i])
 forest(m,leftlabs = rownames(HR),
        lab.e = "Intervention",
        pooled.totals = FALSE,
@@ -155,3 +154,5 @@ write.table(cminput,file=paste(memo,".pval.random.manhattan.qqplot.meta.dge.txt"
 setwd("/mnt/bigdata/Genetic/Projects/shg047/meta/")
 
 }
+
+

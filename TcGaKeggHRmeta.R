@@ -10,6 +10,7 @@ Symbol2ENSG<-function(Symbol){
   ENSG<-na.omit(data.frame(Symbol,ENSG))
   return(ENSG)
 }
+
 ENSG2Symbol<-function(ENSG){
   db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
   ENSG<-unlist(lapply(strsplit(ENSG,split="[.]"),function(x) x[1]))
@@ -76,6 +77,8 @@ tab <- getGeneKEGGLinks(species="hsa")
 tab$Symbol <- mapIds(org.Hs.eg.db, tab$GeneID,column="SYMBOL", keytype="ENTREZID")
 head(tab)
 
+db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
+
 for(kname in names(which(table(tab$PathwayID)>5))){
 print(kname)  
 xout<-subset(tab,PathwayID==kname)
@@ -86,7 +89,9 @@ setwd(knamedirname)
 write.csv(xout,file=paste(knamedir,".kegg.list.csv",sep=""),quote=F)
 
 xii<-as.character(xout$Symbol)
-ENSG<-Symbol2ENSG(as.character(xii))
+ENSG<-as.character(db[match(as.character(xii),db$V4),8])
+ENSG<-na.omit(data.frame(xii,ENSG))
+
 xgene<-c(as.character(ENSG[,2]))
 ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
 
@@ -107,14 +112,18 @@ for(TCGAProject in TCGAProjects){
   fit <- survfit(Surv(week,censored)~Rna, data = dat)
 }
 
-print(c(z,i,as.character(rownames(input)[i])))
 rownames(HR)<-TCGAProjects
 m<-metagen(HR[,1],seTE=HR[,3],comb.fixed = TRUE,comb.random = TRUE,prediction=F,sm="HR")
 fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
 randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
 out<-rbind(out,c(fixedEffect,randomEffect))
 
-pdf(paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
+ENSGnk<-unlist(lapply(strsplit(rownames(input)[i],split="[.]"),function(x) x[1]))
+Symbolnk<-db[match(as.character(ENSGnk),db$V8),4]
+
+print(c(z,i,as.character(Symbolnk)))
+
+pdf(paste(Symbolnk,"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
 forest(m,leftlabs = rownames(HR),
        lab.e = "Intervention",
        pooled.totals = FALSE,
@@ -127,19 +136,22 @@ forest(m,leftlabs = rownames(HR),
        print.I2.ci = TRUE,
        digits.sd = 2,fontsize=9,xlim=c(0.5,2))
 dev.off()
-write.table(HR,file=paste(ENSG2Symbol(rownames(input)[i]),"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
+write.table(HR,file=paste(Symbolnk,"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
 }
 
 colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random")
 rownames(out)<-rownames(input)[ii]
 out3<-data.frame(out)
 out3<-out3[order(out3$pval.random),]
-out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3))))
+
+ENSGpk<-unlist(lapply(strsplit(as.character(rownames(out3)),split="[.]"),function(x) x[1]))
+Symbolnk<-db[match(as.character(ENSGpk),db$V8),4]
+out3$symbol<-as.character(Symbolnk)
 
 memo=knamedir
 
-write.table(out3,file=paste(memo,".tcga.pancancer.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
-write.csv(out3,file=paste(memo,".tcga.pancancer.meta.pvalue.csv",sep=""),quote=F)
+write.table(out3,file=paste(memo,".OS.HR.tcga.pancancer.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
+write.csv(out3,file=paste(memo,".OS.HR.tcga.pancancer.meta.pvalue.csv",sep=""),quote=F)
 
 output<-data.frame(ensg[match(unlist(lapply(strsplit(rownames(out3),"[.]"),function(x) x[1])),ensg[,5]),],out3)
 
@@ -152,7 +164,6 @@ CMplot(cminput,plot.type="b",memo=paste(memo,".random",sep=""),LOG10=TRUE,thresh
 write.table(cminput,file=paste(memo,".pval.random.manhattan.qqplot.meta.dge.txt",sep=""),sep="\t",quote=F,row.name=T,col.names=NA)
 
 setwd("/mnt/bigdata/Genetic/Projects/shg047/meta/")
-
 }
 
 

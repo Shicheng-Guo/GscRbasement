@@ -122,17 +122,10 @@ m<-metagen(HR[,1],seTE=HR[,3],comb.fixed = TRUE,comb.random = TRUE,prediction=F,
 fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
 randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
 out<-rbind(out,c(fixedEffect,randomEffect))
-
 Symbolnk<-db[match(rownames(input)[i],db$V8),4]
-
 print(c(z,i,as.character(Symbolnk)))
-
 pdf(paste(Symbolnk,"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
-
-m<-na.omit(m)
-HR<-na.omit(HR)
-
-forest(na.omit(m),leftlabs = rownames(HR),
+forest(m,leftlabs = rownames(HR),
        lab.e = "Intervention",
        pooled.totals = FALSE,
        smlab = "",studlab=rownames(HR),

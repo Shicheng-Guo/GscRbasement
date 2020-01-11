@@ -83,7 +83,12 @@ head(tab)
 
 db<-read.table("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/ENSG.ENST.ENSP.Symbol.hg19.bed",sep="\t")
 
-for(kname in names(which(table(tab$PathwayID)>5))){
+path<-names(which(table(tab$PathwayID)>5))
+
+# match("path:hsa04740",path)
+
+for(knameii in 205:length(path)){
+kname<-path[knameii]
 print(kname)  
 xout<-subset(tab,PathwayID==kname)
 knamedir<-gsub("path:","",kname)

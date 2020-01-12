@@ -123,7 +123,7 @@ rownames(rlt)<-rownames(input)[ii]
 colnames(rlt)<-c("idx","beta","pval","cilb","ciub","i2","tau2")
 rlt2<-data.frame(rlt)
 rlt2<-rlt2[order(rlt2$pval),]
-rlt2$symbol<-as.character(ENSG2Symbol(as.character(rownames(rlt2))),db)
+rlt2$symbol<-as.character(ENSG2Symbol(as.character(rownames(rlt2)),db))
 head(rlt2)
 # save dge to csv
 write.table(rlt2,file=paste(memo,".tcga.pancancer.smd.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)

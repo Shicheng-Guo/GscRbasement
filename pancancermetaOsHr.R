@@ -103,7 +103,7 @@ pancancermetaOsHr<-function(symbolist,memo){
     write.table(HR,file=paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
   }
 colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random")
-rownames(out)<-rownames(input)
+rownames(out)<-rownames(input)[ii]
 out3<-data.frame(out)
 out3<-out3[order(out3$pval.random),]
 out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3)),db))

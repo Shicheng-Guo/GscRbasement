@@ -14,6 +14,7 @@ system(x)
 }
 # install.packages("CMplot")
 setwd("pick")
+system("copy ../*.csv")
 library("CMplot")
 ensg<-read.table("~/hpc/db/hg19/ENSG.hg19.bed")
 ensgrlt<-ensg[match(unlist(lapply(strsplit(as.character(out$X),"[.]"),function(x) x[1])),ensg[,5]),]

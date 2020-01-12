@@ -67,9 +67,8 @@ pancancermetaOsHr<-function(symbolist,memo){
   ENSG<-Symbol2ENSG(as.character(symbolist),db)
   xgene<-c(as.character(ENSG[,2]))
   ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
-  ii
   out<-c()
-  for(i in 1:nrow(input)){
+  for(i in ii){
     HR<-c()
     for(TCGAProject in TCGAProjects){
       newdata<-input[,phen$project_id==paste("TCGA-",TCGAProject,sep="")]

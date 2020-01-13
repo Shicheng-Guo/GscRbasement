@@ -68,8 +68,10 @@ pancancermetaOsHr<-function(symbolist,memo){
   xgene<-c(as.character(ENSG[,2]))
   ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
   out<-c()
+  z<-1                                   
   for(i in ii){
     HR<-c()
+    z<-z+1
     for(TCGAProject in TCGAProjects){
       newdata<-input[,phen$project_id==paste("TCGA-",TCGAProject,sep="")]
       xphen<-phen[phen$project_id==paste("TCGA-",TCGAProject,sep=""),]
@@ -86,7 +88,7 @@ pancancermetaOsHr<-function(symbolist,memo){
     fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
     randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
     out<-rbind(out,c(fixedEffect,randomEffect))
-    print(c(i,rownames(input)[i]))
+    print(c(z,i,rownames(input)[i]))
     pdf(paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
     forest(m,leftlabs = rownames(HR),
            lab.e = "Intervention",

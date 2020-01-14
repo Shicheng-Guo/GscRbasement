@@ -63,12 +63,14 @@ input<-rnaseqdata[,idx]
 idx<-which(phen$pid %in% paste("TCGA-",TCGAProjects,sep=""))
 phen<-phen[idx,]
 input<-input[,idx]
-noise<-abs(matrix(rnorm(ncol(input)*nrow(input),0,0.01),nrow=nrow(input),ncol=ncol(input)))
-input<-input+noise
 
 input<-log(input+1,2)
-input<-RawNARemove(input)
-input<-RawZeroRemove(input)
+
+#input<-RawNARemove(input)
+#input<-RawZeroRemove(input)
+
+noise<-abs(matrix(rnorm(ncol(input)*nrow(input),0,0.01),nrow=nrow(input),ncol=ncol(input)))
+input<-input+noise
 
 Seq<-paste(phen$project_id,phen$phen2,sep="-")
 rlt<-c()
@@ -87,7 +89,7 @@ for(i in 1:nrow(input)){
   output$source=Source
   output<-na.omit(output)
   es<-escalc(m1i=m1i, sd1i=sd1i, n1i=n1i, m2i=m2i, sd2i=sd2i, n2i=n2i,measure="MD",data=output)
-  md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output)
+  md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output,digits=5,control=list(stepadj=0.5))
   rlt<-rbind(rlt,c(i,md$beta,md$pval,md$ci.lb,md$ci.ub,md$I2,md$tau2))
   m<-metagen(yi,seTE=vi,data = es,
              comb.fixed = TRUE,
@@ -119,11 +121,13 @@ rlt2$symbol<-as.character(ENSG2Symbol(as.character(rownames(rlt2))),db)
 head(rlt2)
 # save dge to csv
 setwd("/home/guosa/hpc/meta")
-write.table(rlt2,file=paste("tcga.pancancer.smd.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
-write.csv(rlt2,file=paste("tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
+write.table(rlt2,file=paste("tcga.pancancer.smd.meta.pvalue.slow.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
+write.csv(rlt2,file=paste("tcga.pancancer.smd.meta.pvalue.slow.csv",sep=""),quote=F)
 
 dim(subset(rlt2,pval<10^-8))
 up<-(subset(rlt2,beta>0 & pval<10^-8))
 down<-(subset(rlt2,beta<0 & pval<10^-8))
 write.csv(up,file=paste("up.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
 write.csv(down,file=paste("down.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
+
+

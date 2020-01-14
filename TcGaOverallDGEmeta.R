@@ -89,7 +89,7 @@ for(i in 1:nrow(input)){
   output$source=Source
   output<-na.omit(output)
   es<-escalc(m1i=m1i, sd1i=sd1i, n1i=n1i, m2i=m2i, sd2i=sd2i, n2i=n2i,measure="MD",data=output)
-  md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output,digits=5,control=list(stepadj=0.5))
+  md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output,digits=10,control=list(stepadj=1))
   rlt<-rbind(rlt,c(i,md$beta,md$pval,md$ci.lb,md$ci.ub,md$I2,md$tau2))
   m<-metagen(yi,seTE=vi,data = es,
              comb.fixed = TRUE,

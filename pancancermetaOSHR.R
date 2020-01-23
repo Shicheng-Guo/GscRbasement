@@ -90,7 +90,7 @@ pancancermetaOSHR<-function(symbolist,memo){
     randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
     out<-rbind(out,c(fixedEffect,randomEffect,m$I2,m$tau2,m$H,m$Q))
 	genesymbol<-ENSG2Symbol(rownames(input)[i],db)
-    print(c(z,i,genesymbol))
+    print(c(z,i,as.character(genesymbol)))
     pdf(paste(genesymbol,"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
     forest(m,leftlabs = rownames(HR),
            lab.e = "Intervention",

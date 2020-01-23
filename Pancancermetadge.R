@@ -122,5 +122,5 @@ rownames(out)<-rownames(input)[ii]
 out3<-data.frame(out)
 out3<-out3[order(out3$pval.random),]
 out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3)),db))
-write.csv(out3,file=paste(memo,"tcga.pancancer.meta.smd.pvalue.csv",sep=""),quote=F,row.names=F)
+write.csv(out3,file=paste(memo,"tcga.pancancer.meta.smd.pvalue.csv",sep=""),quote=F)
 }

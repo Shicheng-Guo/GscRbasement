@@ -106,7 +106,7 @@ for(i in ii){
   pdf(paste(Symbol,"-",rownames(input)[i],".SMD.PANC.pdf",sep=""))
   forest(m,leftlabs = Source,
          lab.e = "Intervention",
-		 print.I2 = comb.fixed,
+		 print.I2 = TRUE,
          pooled.totals = FALSE,
          smlab = "",studlab=Source,
 		 text.fixed = " Fix effect",

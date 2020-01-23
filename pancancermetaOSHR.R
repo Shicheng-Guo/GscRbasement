@@ -89,7 +89,7 @@ pancancermetaOSHR<-function(symbolist,memo){
     m<-metagen(HR[,1],seTE=HR[,3],comb.fixed = TRUE,comb.random = TRUE,prediction=F,sm="HR")
     fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
     randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
-    out<-rbind(out,c(fixedEffect,randomEffect))
+    out<-rbind(out,c(fixedEffect,randomEffect,m$I2,m$tau2,m$H,m$Q))
     print(c(z,i,rownames(input)[i]))
     pdf(paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
     forest(m,leftlabs = rownames(HR),
@@ -106,7 +106,7 @@ pancancermetaOSHR<-function(symbolist,memo){
     dev.off()
     write.table(HR,file=paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
   }
-colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random")
+colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random","I2","Tau2","H","Q")
 rownames(out)<-rownames(input)[ii]
 out3<-data.frame(out)
 out3<-out3[order(out3$pval.random),]

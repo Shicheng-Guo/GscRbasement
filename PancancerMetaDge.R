@@ -132,8 +132,6 @@ write.csv(rlt2,file=paste(memo,".tcga.pancancer.smd.meta.pvalue.csv",sep=""),quo
 dim(subset(rlt2,pval<10^-8))
 up<-(subset(rlt2,beta>0 & pval<10^-8))
 down<-(subset(rlt2,beta<0 & pval<10^-8))
-write.csv(up,file=paste(memo,".up.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
-write.csv(down,file=paste(memo,".down.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
 }
 
 

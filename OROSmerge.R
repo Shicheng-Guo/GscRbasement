@@ -9,7 +9,7 @@ pick<-subset(out,pval<10^-4 & pval.fixed<0.05 & beta*(TE.fixed-1)>0)
 pick<-pick[order(pick$pval),]
 
 if(nrow(pick)>80){
-pick<-pick[80,]
+pick<-pick[1:80,]
 }
 
 dir.create("pick")

@@ -109,7 +109,7 @@ for(i in ii){
 		 print.I2 = comb.fixed,
          pooled.totals = FALSE,
          smlab = "",studlab=Source,
-		 text.fixed = " Fix effect"
+		 text.fixed = " Fix effect",
          text.random = "Random effect",
          print.tau2 = TRUE,
          col.diamond = "blue",

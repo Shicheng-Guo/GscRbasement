@@ -112,3 +112,4 @@ out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3)),db))
 write.table(out3,file=paste(memo,"tcga.pancancer.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
 write.csv(out3,file=paste(memo,"tcga.pancancer.meta.pvalue.csv",sep=""),quote=F)
 }
+                                   

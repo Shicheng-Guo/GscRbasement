@@ -1,5 +1,4 @@
-
-pancancermetaOsHr<-function(symbolist,memo){
+pancancermetaOSHR<-function(symbolist,memo){
   
   source("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/GscTools.R")
   library("meta")
@@ -90,8 +89,9 @@ pancancermetaOsHr<-function(symbolist,memo){
     fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
     randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
     out<-rbind(out,c(fixedEffect,randomEffect,m$I2,m$tau2,m$H,m$Q))
-    print(c(z,i,rownames(input)[i]))
-    pdf(paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
+	genesymbol<-ENSG2Symbol(rownames(input)[i],db)
+    print(c(z,i,genesymbol))
+    pdf(paste(genesymbol,"-",rownames(input)[i],".OS.HR.PANC.pdf",sep=""))
     forest(m,leftlabs = rownames(HR),
            lab.e = "Intervention",
            pooled.totals = FALSE,
@@ -104,14 +104,13 @@ pancancermetaOsHr<-function(symbolist,memo){
            print.I2.ci = TRUE,
            digits.sd = 2,fontsize=9,xlim=c(0.5,2))
     dev.off()
-    write.table(HR,file=paste(ENSG2Symbol(rownames(input)[i],db),"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
+    write.table(HR,file=paste(genesymbol,"-",rownames(input)[i],".OS.HR.EACH.txt",sep=""),sep="\t",quote=F,col.names=NA,row.names=T)
   }
 colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random","I2","Tau2","H","Q")
 rownames(out)<-rownames(input)[ii]
 out3<-data.frame(out)
 out3<-out3[order(out3$pval.random),]
 out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3)),db))
-write.table(out3,file=paste(memo,"tcga.pancancer.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
-write.csv(out3,file=paste(memo,"tcga.pancancer.meta.pvalue.csv",sep=""),quote=F)
+write.csv(out3,file=paste(memo,"tcga.pancancer.meta.HR.OS.pvalue.csv",sep=""),quote=F)
 }
                                    

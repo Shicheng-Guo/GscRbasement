@@ -1,5 +1,4 @@
 OROSmerge<-function(memo){
-memo="housekeeping"
 file<-list.files(pattern="*pvalue.csv")
 dge<-read.csv(file[1])
 os<-read.csv(file[2])

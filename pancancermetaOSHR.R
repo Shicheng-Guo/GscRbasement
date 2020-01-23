@@ -1,5 +1,5 @@
 
-pancancermetaOsHr<-function(symbolist,memo){
+pancancermetaOSHR<-function(symbolist,memo){
   
   source("https://raw.githubusercontent.com/Shicheng-Guo/GscRbasement/master/GscTools.R")
   library("meta")

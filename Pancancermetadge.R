@@ -95,8 +95,8 @@ for(i in ii){
   es<-escalc(m1i=m1i, sd1i=sd1i, n1i=n1i, m2i=m2i, sd2i=sd2i, n2i=n2i,measure="MD",data=output)
   md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output)
   m<-metagen(yi,seTE=vi,data = es,comb.fixed = TRUE,comb.random = TRUE,prediction=F,sm="SMD")
-  fixedEffect<-c(exp(m$TE.fixed),exp(m$lower.fixed),exp(m$upper.fixed),m$pval.fixed)
-  randomEffect<-c(exp(m$TE.random),exp(m$lower.random),exp(m$upper.random),m$pval.random)
+  fixedEffect<-c(m$TE.fixed,m$lower.fixed,m$upper.fixed,m$pval.fixed)
+  randomEffect<-c(m$TE.random,m$lower.random,m$upper.random,m$pval.random)
   out<-rbind(out,c(fixedEffect,randomEffect,m$I2,m$tau2,m$H,m$Q))
 
   Symbol<-ENSG2Symbol(rownames(input)[i],db)

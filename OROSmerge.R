@@ -1,8 +1,7 @@
 OROSmerge<-function(memo){
-memo="housekeeping"
 file<-list.files(pattern="*pvalue.csv")
-dge<-read.csv(file[1])
-os<-read.csv(file[2])
+os<-read.csv(file[1])
+dge<-read.csv(file[2])
 out<-merge(dge,os,by="X")
 
 pick<-subset(out,pval<10^-4 & pval.fixed<0.05 & beta*(TE.fixed-1)>0)

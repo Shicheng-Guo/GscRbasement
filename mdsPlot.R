@@ -1,5 +1,5 @@
 mdsPlot<-function (dat, numPositions = 1000, sampNames = NULL, sampGroups = NULL, 
-          xlim, ylim, pch = 16, pal = brewer.pal(8, "Dark2"), 
+          xlim, ylim, pch = 16, pal = brewer.pal(8, "Dark2"), cex=1.25,
           legendPos = "bottomleft", legendNCol=1, main = NULL){
   if (is(dat, "MethylSet") || is(dat, "RGChannelSet")) {
     b <- getBeta(dat)
@@ -25,10 +25,10 @@ mdsPlot<-function (dat, numPositions = 1000, sampNames = NULL, sampGroups = NULL
   sampGroups <- as.factor(sampGroups)
   col <- pal[sampGroups]
   if (is.null(sampNames)) {
-    plot(x = fit[, 1], y = fit[, 2], col = col, pch = pch, xlim = xlim, ylim = ylim, xlab = "", ylab = "", main = main)
+    plot(x = fit[, 1], y = fit[, 2], col = col, pch = pch, xlim = xlim, ylim = ylim, xlab = "", ylab = "", main = main,cex=cex)
   }
   else {
-    plot(x = 0, y = 0, type = "n", xlim = xlim, ylim = ylim, xlab = "", ylab = "", main = main)
+    plot(x = 0, y = 0, type = "n", xlim = xlim, ylim = ylim, xlab = "", ylab = "", main = main,cex=cex)
     text(x = fit[, 1], y = fit[, 2], sampNames, col = col)
   }
   numGroups <- length(levels(sampGroups))

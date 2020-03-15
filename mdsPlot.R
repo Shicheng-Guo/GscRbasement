@@ -35,6 +35,6 @@ mdsPlot<-function (dat, numPositions = 1000, sampNames = NULL, sampGroups = NULL
   if (missing(legendNCol)) 
     legendNCol <- numGroups
   if (numGroups > 1) {
-    legend(x = legendPos, legend = levels(sampGroups), ncol = legendNCol, text.col = pal[seq_len(numGroups)],bty="n")
+    legend(x = legendPos, legend = levels(sampGroups), ncol = legendNCol, text.col = pal[seq_len(numGroups)],bty="n",cex=cex)
   }
 }

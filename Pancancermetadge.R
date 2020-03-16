@@ -75,7 +75,8 @@ xgene<-c(as.character(ENSG[,2]))
 ii<-na.omit(unique(unlist(lapply(xgene,function(x) grep(x,rownames(input))))))
 
 Seq<-paste(phen$project_id,phen$phen2,sep="-")
-out<-c()
+rlt<-c()
+coll<-c()
 z<-1
 for(i in ii){
   z<-z+1
@@ -94,22 +95,23 @@ for(i in ii){
   output<-na.omit(output)
   es<-escalc(m1i=m1i, sd1i=sd1i, n1i=n1i, m2i=m2i, sd2i=sd2i, n2i=n2i,measure="MD",data=output)
   md <- rma(es,slab=source,method = "REML", measure = "SMD",data=output)
-  m<-metagen(yi,seTE=vi,data = es,comb.fixed = TRUE,comb.random = TRUE,prediction=F,sm="SMD")
-  fixedEffect<-c(m$TE.fixed,m$lower.fixed,m$upper.fixed,m$pval.fixed)
-  randomEffect<-c(m$TE.random,m$lower.random,m$upper.random,m$pval.random)
-  out<-rbind(out,c(fixedEffect,randomEffect,m$I2,m$tau2,m$H,m$Q))
+  rlt<-rbind(rlt,c(i,md$beta,md$pval,md$ci.lb,md$ci.ub,md$I2,md$tau2))
+  coll<-c(coll,i)
+  m<-metagen(yi,seTE=vi,data = es,
+             comb.fixed = TRUE,
+             comb.random = TRUE,
+             prediction=F,
+             sm="SMD")
 
   Symbol<-ENSG2Symbol(rownames(input)[i],db)
   print(c(z,i,as.character(Symbol)))
   pdf(paste(Symbol,"-",rownames(input)[i],".SMD.PANC.pdf",sep=""))
   forest(m,leftlabs = Source,
          lab.e = "Intervention",
-		 print.I2 = TRUE,
          pooled.totals = FALSE,
          smlab = "",studlab=Source,
-		 text.fixed = "Fix effect",
-         text.random = "Random effect",
-         print.tau2 = TRUE,
+         text.random = "Overall effect",
+         print.tau2 = FALSE,
          col.diamond = "blue",
          col.diamond.lines = "black",
          col.predict = "red",
@@ -117,10 +119,20 @@ for(i in ii){
          digits.sd = 2,fontsize=8)
   dev.off()
 }
-colnames(out)<-c("TE.fixed","lower.fixed","upper.fixed","pval.fixed","TE.random","lower.random","upper.random","pval.random","I2","Tau2","H","Q")
-rownames(out)<-rownames(input)[ii]
-out3<-data.frame(out)
-out3<-out3[order(out3$pval.random),]
-out3$symbol<-as.character(ENSG2Symbol(as.character(rownames(out3)),db))
-write.csv(out3,file=paste(memo,"tcga.pancancer.meta.dge.smd.pvalue.csv",sep=""),quote=F)
+rownames(rlt)<-rownames(input)[ii]
+colnames(rlt)<-c("idx","beta","pval","cilb","ciub","i2","tau2")
+rlt2<-data.frame(rlt)
+rlt2<-rlt2[order(rlt2$pval),]
+rlt2$symbol<-as.character(ENSG2Symbol(as.character(rownames(rlt2)),db))
+head(rlt2)
+# save dge to csv
+write.table(rlt2,file=paste(memo,".tcga.pancancer.smd.meta.pvalue.txt",sep=""),sep="\t",quote=F,col.names = NA,row.names = T)
+write.csv(rlt2,file=paste(memo,".tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
+#dim(subset(rlt2,pval<10^-8))
+#up<-(subset(rlt2,beta>0 & pval<10^-8))
+#down<-(subset(rlt2,beta<0 & pval<10^-8))
+#write.csv(up,file=paste(memo,".up.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
+#write.csv(down,file=paste(memo,".down.tcga.pancancer.smd.meta.pvalue.csv",sep=""),quote=F)
 }
+
+

@@ -29,6 +29,9 @@ for(i in 1:length(file)){
   stop<-grep('stop',data$ExonicFunc.refGene)
   lof<-sort(c(Nsyn6I12,frameshift_deletion,frameshift_insertion,stop))
   write.csv(data[lof,],file=paste(file[i],".lof",sep=""),row.names = F,quote=F)
+  write.table(data[lof,],file=paste(file[i],".lof.txt",sep=""),sep="\t",row.names = F,col.names=F,quote=F)
   print(file[i])
+  print(nrow(data))
 }
+  write.table(rs,file=paste("lof.rsid.txt",sep=""),row.names = F,colnames=F,quote=F)
 

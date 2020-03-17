@@ -23,15 +23,28 @@ for(i in 1:length(file)){
   data[,3]<-data$avsnp150
   num<-RiskAAC(data)
   summ<-table(num)
-  Nsyn6I12<-names(summ)[which(summ>6)]
+  Nsyn6I12<-names(summ)[which(summ>2)]
   frameshift_deletion<-grep('\\bframeshift deletion',data$ExonicFunc.refGene)
   frameshift_insertion<-grep('\\bframeshift insertion',data$ExonicFunc.refGene)
   stop<-grep('stop',data$ExonicFunc.refGene)
   lof<-sort(c(Nsyn6I12,frameshift_deletion,frameshift_insertion,stop))
   write.csv(data[lof,],file=paste(file[i],".lof",sep=""),row.names = F,quote=F)
-  write.table(data[lof,],file=paste(file[i],".lof.txt",sep=""),sep="\t",row.names = F,col.names=F,quote=F)
+  write.table(data[lof,1:7],file=paste(file[i],".lof.txt",sep=""),sep="\t",row.names = F,col.names=F,quote=F)
   print(file[i])
   print(nrow(data))
 }
-  write.table(rs,file=paste("lof.rsid.txt",sep=""),row.names = F,colnames=F,quote=F)
 
+
+data<-read.csv("FSTL1.hg19_multianno.csv")
+data[,3]<-data$avsnp150
+num<-RiskAAC(data)
+summ<-table(num)
+Nsyn6I12<-names(summ)[which(summ>6)]
+frameshift_deletion<-grep('\\bframeshift deletion',data$ExonicFunc.refGene)
+frameshift_insertion<-grep('\\bframeshift insertion',data$ExonicFunc.refGene)
+stop<-grep('stop',data$ExonicFunc.refGene)
+lof<-sort(c(Nsyn6I12,frameshift_deletion,frameshift_insertion,stop))
+write.csv(data[lof,],file="FSTL1.lof",row.names = F,quote=F)
+write.table(data[lof,1:7],file=paste(file[i],".lof.txt",sep=""),sep="\t",row.names = F,col.names=F,quote=F)
+print(file[i])
+print(nrow(data))
